@@ -24,7 +24,7 @@ $(TARGET): $(OBJECTS) Makefile
 	mkdir -p $(BUILD_DIR)
 	$(CXX) $(OBJECTS) $(LFLAGS) -o $@
 
-.PHONY: clean build run format
+.PHONY: clean build run debug format
 
 build: $(TARGET)
 
