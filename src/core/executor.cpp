@@ -8,7 +8,7 @@ bl::Executor bl::executor_inst;
 void bl::Executor::run(void) {
     for (InputNode node : input_netlist) {
         if (node.is_floating) {
-            bl::log::warning << "Floating input node: " << node.full_name;
+            bl::log::warning << "Floating input node: " << node.get_name();
         }
     }
 
@@ -16,11 +16,7 @@ void bl::Executor::run(void) {
     for (OutputNode output_node : output_netlist) {
         for (InputNode* input_node : output_node.connections) {
             input_node->set_state(output_node.get_state());
-            bl::log::info << input_node->pretty_name;
-            bl::log::info << input_node->get_name();
-            bl::log::info << input_node->full_name;
-            input_node->update_state();
-            // bl::log::info << input_node->parent->get_name();
+            input_node->parent->update();
         }
     }
 
@@ -30,23 +26,25 @@ void bl::Executor::run(void) {
         for (InputNode* input_node : bit_flip.node->connections) {
             input_node->set_state(bit_flip.new_state);
         }
-        bit_flip_queue.pop();
+        this->bit_flip_queue.pop();
     }
 
     bl::log::info << bl::log::green << "Running netlist with "
                   << std::to_string(input_netlist.size() + output_netlist.size()) << " elements";
-    thread = std::thread(&Executor::thread_func, this);
+    this->thread = std::thread(&Executor::thread_func, this);
 }
 
 void bl::Executor::kill(void) {
     bl::log::info << bl::log::green << "Terminating netlist execution";
 
     this->kill_thread = true;
-    thread.join();
+    if (this->thread.joinable()) {
+        this->thread.join();
+    }
 }
 
 void bl::Executor::thread_func(void) {
-    while (!kill_thread) {
+    while (!this->kill_thread) {
         if (this->bit_flip_queue.empty()) {
             continue;
         }
@@ -55,8 +53,8 @@ void bl::Executor::thread_func(void) {
         for (InputNode* input_node : bit_flip.node->connections) {
             input_node->set_state(bit_flip.new_state);
         }
-        bit_flip_queue.pop();
+        this->bit_flip_queue.pop();
     }
 }
 
-void bl::Executor::queue_bit_flip(BitFlip bit_flip) { bit_flip_queue.push(bit_flip); }
+void bl::Executor::queue_bit_flip(BitFlip bit_flip) { this->bit_flip_queue.push(bit_flip); }
