@@ -2,7 +2,7 @@ BUILD_DIR = build
 TARGET = $(BUILD_DIR)/prog.out
 
 CFLAGS = -g -Wall -Wextra -std=c++2a
-LFLAGS = -Wall -Wextra -std=c++2a
+LFLAGS = -Wall -Wextra -pthread -std=c++2a
 
 CXX = g++
 CLANG_FORMAT = clang-format
