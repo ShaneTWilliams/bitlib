@@ -9,20 +9,14 @@
 std::deque<bl::InputNode> bl::input_netlist = std::deque<bl::InputNode>();
 std::deque<bl::OutputNode> bl::output_netlist = std::deque<bl::OutputNode>();
 
-bl::Node::Node(bl::Direction direction, bl::State start_state,
-               UpdateCallback update_callback, std::string name)
-    : Component(name),
-      direction(direction),
-      update_state(update_callback),
-      state(start_state) {}
+bl::Node::Node(bl::Direction direction, bl::State start_state, Primitive* parent, std::string name)
+    : Component(name), direction(direction), parent(parent), state(start_state) {}
 
-bl::OutputNode::OutputNode(bl::State start_state, UpdateCallback update_callback,
-                           std::string name)
-    : Node(Direction::OUTPUT, start_state, update_callback, name) {}
+bl::OutputNode::OutputNode(bl::State start_state, Primitive* parent, std::string name)
+    : Node(Direction::OUTPUT, start_state, parent, name) {}
 
-bl::InputNode::InputNode(bl::State start_state, UpdateCallback update_callback,
-                         std::string name)
-    : Node(Direction::INPUT, start_state, update_callback, name) {}
+bl::InputNode::InputNode(bl::State start_state, Primitive* parent, std::string name)
+    : Node(Direction::INPUT, start_state, parent, name) {}
 
 bl::State bl::Node::get_state(void) { return this->state; }
 
@@ -62,9 +56,9 @@ bool bl::is_connected(OutputNode* output_node, InputNode* input_node) {
     return bl::is_connected(input_node, output_node);
 }
 
-bl::OutputNode* bl::OutputNode::create_new(bl::State start_state, UpdateCallback update_callback,
+bl::OutputNode* bl::OutputNode::create_new(bl::State start_state, Primitive* parent,
                                            std::string name) {
-    output_netlist.push_back(OutputNode(start_state, update_callback, name));
+    output_netlist.push_back(OutputNode(start_state, parent, name));
     return &output_netlist.back();
 }
 
@@ -75,23 +69,20 @@ void bl::OutputNode::disconnect(InputNode* node) { bl::disconnect(node, this); }
 bool bl::OutputNode::is_connected(InputNode* node) { return bl::is_connected(node, this); }
 
 void bl::OutputNode::set_state(bl::State state, bool push_to_queue) {
-    if (state == this->state) {
-        return;
-    }
     if (push_to_queue) {
         bl::executor_inst.queue_bit_flip({this, state});
     } else {
         if (this->log_state_changes) {
-            bl::log::debug << std::setw(40) << std::left << this->get_name() << std::right
+            bl::log::debug << std::setw(60) << std::left << this->get_name() << std::right
                            << (bool)this->state << " -> " << (bool)state;
         }
         this->state = state;
     }
 }
 
-bl::InputNode* bl::InputNode::create_new(bl::State start_state, UpdateCallback update_callback,
+bl::InputNode* bl::InputNode::create_new(bl::State start_state, Primitive* parent,
                                          std::string name) {
-    input_netlist.push_back(InputNode(start_state, update_callback, name));
+    input_netlist.push_back(InputNode(start_state, parent, name));
     return &input_netlist.back();
 }
 
@@ -102,13 +93,10 @@ void bl::InputNode::disconnect(OutputNode* node) { bl::disconnect(this, node); }
 bool bl::InputNode::is_connected(OutputNode* node) { return bl::is_connected(this, node); }
 
 void bl::InputNode::set_state(bl::State state) {
-    if (state == this->state) {
-        return;
-    }
     if (this->log_state_changes) {
-        bl::log::debug << std::setw(40) << std::left << this->get_name() << std::right
+        bl::log::debug << std::setw(60) << std::left << this->get_name() << std::right
                        << (bool)this->state << " -> " << (bool)state;
     }
     this->state = state;
-    &(this->update_state)();
+    this->parent->update();
 }
