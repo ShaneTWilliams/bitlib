@@ -6,12 +6,15 @@ namespace bl {
 
 class Component {
  public:
-    Component(std::string full_name);
+    Component(std::string name);
 
     std::string get_name(void);
+    std::string get_label(void);
+    void set_label(std::string);
 
-    std::string full_name;
-    std::string pretty_name;
+ protected:
+    std::string name;
+    std::string label;
 };
 
 }  // namespace bl

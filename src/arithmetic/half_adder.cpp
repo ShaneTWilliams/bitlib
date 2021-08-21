@@ -2,10 +2,10 @@
 
 bl::HalfAdder::HalfAdder(std::string name)
     : Component(name),
-      and_gate(AndGate<2>("::AND")),
-      xor_gate(XorGate<2>("::XOR")),
-      a_buf_gate(BufferGate("::A_BUF")),
-      b_buf_gate(BufferGate("::B_BUF")) {
+      and_gate(AndGate<2>(name + "::AND")),
+      xor_gate(XorGate<2>(name + "::XOR")),
+      a_buf_gate(BufferGate(name + "::A_BUFFER")),
+      b_buf_gate(BufferGate(name + "::B_BUFFER")) {
     bl::connect(this->a_buf_gate.output, this->and_gate.inputs[0]);
     bl::connect(this->b_buf_gate.output, this->and_gate.inputs[1]);
     bl::connect(this->a_buf_gate.output, this->xor_gate.inputs[0]);
@@ -16,8 +16,8 @@ bl::HalfAdder::HalfAdder(std::string name)
     this->sum = xor_gate.output;
     this->carry = and_gate.output;
 
-    this->a->pretty_name = this->full_name + "::A";
-    this->b->pretty_name = this->full_name + "::B";
-    this->sum->pretty_name = this->full_name + "::SUM";
-    this->carry->pretty_name = this->full_name + "::CARRY";
+    this->a->set_label(this->get_name() + "::A");
+    this->b->set_label(this->get_name() + "::B");
+    this->sum->set_label(this->get_name() + "::SUM");
+    this->carry->set_label(this->get_name() + "::CARRY");
 }

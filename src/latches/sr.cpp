@@ -10,8 +10,8 @@ bl::SrLatch::SrLatch(std::string name)
     this->q = r_nor.output;
     this->qn = s_nor.output;
 
-    this->s->pretty_name = this->full_name + "::S";
-    this->r->pretty_name = this->full_name + "::R";
-    this->q->pretty_name = this->full_name + "::Q";
-    this->qn->pretty_name = this->full_name + "::QN";
+    this->s->set_label(this->get_name() + "::S");
+    this->r->set_label(this->get_name() + "::R");
+    this->q->set_label(this->get_name() + "::Q");
+    this->qn->set_label(this->get_name() + "::QN");
 }

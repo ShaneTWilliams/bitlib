@@ -15,9 +15,9 @@ bl::FullAdder::FullAdder(std::string name)
     this->carry_in = half_adder_2.a;
     this->carry_out = or_gate.output;
 
-    this->a->pretty_name = this->full_name + "::A";
-    this->b->pretty_name = this->full_name + "::B";
-    this->sum->pretty_name = this->full_name + "::SUM";
-    this->carry_in->pretty_name = this->full_name + "::CARRY_IN";
-    this->carry_out->pretty_name = this->full_name + "::CARRY_OUT";
+    this->a->set_label(this->get_name() + "::A");
+    this->b->set_label(this->get_name() + "::B");
+    this->sum->set_label(this->get_name() + "::SUM");
+    this->carry_in->set_label(this->get_name() + "::CARRY_IN");
+    this->carry_out->set_label(this->get_name() + "::CARRY_OUT");
 }

@@ -18,9 +18,9 @@ bl::SrFlipFlop::SrFlipFlop(std::string name)
     this->qn = sr_latch.qn;
     this->en = en_buf.input;
 
-    this->s->pretty_name = this->full_name + "::S";
-    this->r->pretty_name = this->full_name + "::R";
-    this->q->pretty_name = this->full_name + "::Q";
-    this->qn->pretty_name = this->full_name + "::QN";
-    this->en->pretty_name = this->full_name + "::EN";
+    this->s->set_label(this->get_name() + "::S");
+    this->r->set_label(this->get_name() + "::R");
+    this->q->set_label(this->get_name() + "::Q");
+    this->qn->set_label(this->get_name() + "::QN");
+    this->en->set_label(this->get_name() + "::EN");
 }
