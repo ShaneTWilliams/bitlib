@@ -13,7 +13,9 @@ class Register : public Component {
  public:
     Register(std::string name);
 
-    uint64_t data;
+    uint64_t get_data(void);
+    static_assert(NUM_BITS <= sizeof(uint64_t) * 8);
+
     std::vector<RegisterBit> bits;
 };
 

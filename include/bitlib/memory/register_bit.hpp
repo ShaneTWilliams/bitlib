@@ -8,9 +8,8 @@ namespace bl {
 class RegisterBit : public Primitive {
  public:
     RegisterBit(std::string name);
-    virtual ~RegisterBit(void) = default;
 
-    void update_state(void);
+    void update(void);
 
     InputNode* input;
     OutputNode* output;
