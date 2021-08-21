@@ -1,8 +1,5 @@
 #include "bitlib/gates/buffer.hpp"
 
-bl::BufferGate::BufferGate(std::string name)
-    : Primitive(name),
-      input(InputNode::create_new(State::LOW, &(this->update_state), name + "::INPUT")),
-      output(OutputNode::create_new(State::LOW, &(this->update_state), name + "::OUTPUT")) {}
+bl::BufferGate::BufferGate(std::string name) : SingleInputGate(name) {}
 
-void bl::BufferGate::update_state(void) { this->output->set_state(this->input->get_state()); }
+void bl::BufferGate::update(void) { this->output->set_state(this->input->get_state()); }

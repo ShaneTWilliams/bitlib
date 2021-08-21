@@ -8,11 +8,9 @@
 namespace bl {
 
 template <uint16_t NUM_INPUTS>
-class BaseGate : public Primitive {
+class MultiInputGate : public Primitive {
  public:
-    BaseGate(std::string name);
-
-    virtual void update_state(void) = 0;
+    MultiInputGate(std::string name);
 
     std::vector<InputNode*> inputs;
     OutputNode* output;
@@ -20,4 +18,4 @@ class BaseGate : public Primitive {
 
 }  // namespace bl
 
-#include "src/gates/base_gate.tpp"
+#include "src/gates/multi_input_gate.tpp"

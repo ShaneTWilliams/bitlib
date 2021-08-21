@@ -1,15 +1,15 @@
 #pragma once
 
-#include "bitlib/gates/base_gate.hpp"
+#include "bitlib/gates/multi_input_gate.hpp"
 
 namespace bl {
 
 template <uint16_t NUM_INPUTS>
-class AndGate : public BaseGate<NUM_INPUTS> {
+class AndGate : public MultiInputGate<NUM_INPUTS> {
  public:
     AndGate(std::string name);
 
-    void update_state(void);
+    void update(void);
 };
 
 }  // namespace bl

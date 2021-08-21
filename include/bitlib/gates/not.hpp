@@ -1,18 +1,14 @@
 #pragma once
 
-#include "bitlib/core/node.hpp"
-#include "bitlib/core/primitive.hpp"
+#include "bitlib/gates/single_input_gate.hpp"
 
 namespace bl {
 
-class NotGate : public Primitive {
+class NotGate : public SingleInputGate {
  public:
     NotGate(std::string name);
 
-    void update_state(void);
-
-    InputNode* input;
-    OutputNode* output;
+    void update(void);
 };
 
 }  // namespace bl
