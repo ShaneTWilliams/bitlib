@@ -16,6 +16,10 @@ class Register : public Component {
     uint64_t get_data(void);
     static_assert(NUM_BITS <= sizeof(uint64_t) * 8);
 
+    std::vector<InputNode*> inputs;
+    std::vector<OutputNode*> outputs;
+
+ private:
     std::vector<RegisterBit> bits;
 };
 
