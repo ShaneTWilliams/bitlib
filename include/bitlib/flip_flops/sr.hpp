@@ -14,7 +14,7 @@ class SrFlipFlop : public Component {
 
     InputNode* s;
     InputNode* r;
-    InputNode* en;
+    InputNode* clk;
     OutputNode* q;
     OutputNode* qn;
 
@@ -22,7 +22,7 @@ class SrFlipFlop : public Component {
     SrLatch sr_latch;
     AndGate<2> s_and;
     AndGate<2> r_and;
-    BufferGate en_buf;
+    BufferGate clk_buf;
 };
 
 }  // namespace bl
